@@ -1,0 +1,16 @@
+---
+- name: Test Connectivity
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: ping test
+      ping:
+      register: ping_result
+    
+    - name: Display ping result
+      debug:
+        var: ping_result
+
+    - name: Display some more information about the host
+      debug:
+        msg: "Host {{ inventory_hostname }} is reachable and has IP address {{ ansible_default_ipv4.address }}"
