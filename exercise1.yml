@@ -1,0 +1,28 @@
+---
+- name: Install and verify a package on all containers
+  hosts: all
+  gather_facts: yes
+  tasks:
+    - name: Install curl
+      apt: 
+        name: curl
+        state: present
+
+    - name: get curl version
+      command: curl --version
+      register: curl_version
+    
+    - name: print out curl version
+      debug:
+        var: curl_version.stdout
+    
+    - name: create temp file
+      shell: echo " AWX is working on ${inventory_hostname}!" > /tmp/awx_test.txt
+
+    - name: read temp file
+      command: cat /tmp/awx_test.txt
+      register: temp_file_content
+    
+    - name: print out temp file content
+      debug:
+        var: temp_file_content.stdout
