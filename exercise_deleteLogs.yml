@@ -1,0 +1,32 @@
+---
+- name: Delete logs
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: find the number of days old
+      set_fact:
+        days_old: "{{ (ansible_date_time.date | to_datetime('%Y-%m-%d') - cutoff_date | to_datetime('%Y-%m-%d')).days }}"
+    
+    - name: Find log files older than cutoff date
+      find:
+        paths: /var/log
+        patterns: "*.log"
+        age: "{{ days_old }}d"
+      register: old_logs
+
+    - name: Delete the found log files
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      loop: "{{ old_logs.files }}"
+    
+    - name: Notify users about log deletion
+      debug:
+        msg: "Deleted {{ old_logs.matched }} log files older than {{ cutoff_date }} on {{ inventory_hostname }}"
+      when: old_logs.matched > 0
+    
+    - name: Notify users if no logs were deleted
+      debug:
+        msg: "No log files older than {{ cutoff_date }} were found on {{ inventory_hostname }}"
+      when: old_logs.matched == 0
