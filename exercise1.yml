@@ -28,7 +28,7 @@
         var: temp_file_content.stdout
 
     - name: get some website content
-      command: curl -s https://www.example.com
+      command: curl -s https://www.google.com
       register: website_content
     
     - name: print out website content
