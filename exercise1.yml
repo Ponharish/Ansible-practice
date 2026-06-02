@@ -17,7 +17,7 @@
         var: curl_version.stdout
     
     - name: create temp file
-      shell: echo " AWX is working on ${inventory_hostname}!" > /tmp/awx_test.txt
+      shell: echo " AWX is working on {{ inventory_hostname }}!" > /tmp/awx_test.txt
 
     - name: read temp file
       command: cat /tmp/awx_test.txt
@@ -26,3 +26,11 @@
     - name: print out temp file content
       debug:
         var: temp_file_content.stdout
+
+    - name: get some website content
+      command: curl -s https://www.example.com
+      register: website_content
+    
+    - name: print out website content
+      debug:
+        var: website_content.stdout
