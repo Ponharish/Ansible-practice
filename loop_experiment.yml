@@ -9,3 +9,4 @@
         msg: "This is {{ inventory_hostname }}"
       loop: "{{ ansible_play_hosts }}"
       delegate_to: localhost
+      run_once: true
