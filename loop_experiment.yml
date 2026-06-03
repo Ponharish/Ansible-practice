@@ -1,0 +1,11 @@
+---
+- name: Loop experiment
+  hosts: all
+  gather_facts: yes
+
+  tasks:
+    - name: A simple loop though all the hosts
+      debug:
+        msg: "This is {{ inventory_hostname }}"
+      loop: "{{ ansible_play_hosts }}"
+      delegate_to: localhost
